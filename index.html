@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OdonML | DevOps Journey</title>
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --accent: #ff4db8;
+            --text: #e0e0e0;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Foto con Glitch y Transición de Opacidad */
+        .photo-container {
+            position: fixed;
+            top: 10%;
+            right: -5%;
+            width: 60vw;
+            height: 80vh;
+            z-index: -1;
+            opacity: 0.4;
+            filter: grayscale(1) contrast(1.2);
+            transition: transform 0.2s ease-out, opacity 0.8s ease-in-out;
+            pointer-events: none;
+            animation: glitch-skew 5s infinite;
+        }
+
+        .photo-hidden {
+            opacity: 0 !important;
+            transform: translateX(50px);
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            mask-image: linear-gradient(to left, black, transparent);
+            -webkit-mask-image: linear-gradient(to left, black, transparent);
+        }
+
+        @keyframes glitch-skew {
+          0% { transform: skew(0deg) translateX(0); }
+          5%, 10% { transform: skew(-1deg) translateX(-5px); }
+          15% { transform: skew(2deg) translateX(10px); }
+          20% { transform: skew(0deg) translateX(0); }
+          100% { transform: skew(0deg) translateX(0); }
+        }
+
+        main {
+            padding: 5rem 10%;
+            max-width: 1400px;
+        }
+
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .glitch-name {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -2px;
+            position: relative;
+            color: var(--text);
+            animation: float 6s ease-in-out infinite;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .glitch-name .ml-text {
+            position: relative;
+            animation: glitch-text 1.5s infinite;
+            color: var(--accent);
+        }
+
+        .glitch-name .ml-text::before,
+        .glitch-name .ml-text::after {
+            content: 'ODON ML';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch-name .ml-text::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--accent);
+            color: rgba(255, 77, 184, 0.5);
+            animation: glitch-shadow-left 2s infinite;
+        }
+
+        .glitch-name .ml-text::after {
+            left: -2px;
+            text-shadow: 0px 0 #fff;
+            color: #fff;
+            animation: glitch-shadow-right 3s infinite;
+        }
+
+        @keyframes glitch-text {
+            0% { transform: translate(0); }
+            1% { transform: translate(-10px, 5px); }
+            2% { transform: translate(10px, -5px); }
+            3% { transform: translate(0); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes glitch-shadow-left {
+            0% { left: 2px; }
+            10% { left: -5px; }
+            30% { left: 3px; }
+            50% { left: -2px; }
+            100% { left: 2px; }
+        }
+
+        @keyframes glitch-shadow-right {
+            0% { left: -2px; }
+            20% { left: 5px; }
+            40% { left: -3px; }
+            60% { left: 2px; }
+            100% { left: -2px; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 20px;
+            color: var(--accent);
+            border-left: 3px solid var(--accent);
+            padding-left: 15px;
+        }
+
+        section {
+            margin-bottom: 150px;
+        }
+
+        h2 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 40px;
+            color: rgba(255,255,255,0.4);
+            display: flex;
+            align-items: center;
+        }
+
+        h2::after {
+            content: "";
+            height: 1px;
+            width: 100px;
+            background: var(--accent);
+            margin-left: 20px;
+        }
+
+        .about-content {
+            max-width: 600px;
+            font-size: 1.1rem;
+            background: var(--glass);
+            padding: 40px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            border-radius: 2px;
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-tag {
+            padding: 20px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            height: 400px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            background: rgba(255, 77, 184, 0.05);
+        }
+
+        footer {
+            padding: 100px 10%;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .github-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .github-link:hover { color: var(--accent); }
+
+        @media (max-width: 768px) {
+            .photo-container { width: 100vw; opacity: 0.2; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="photo-container" id="main-photo">
+        <img src="Odon.jpg" alt="OdonML">
+    </div>
+
+    <main>
+        <header id="hero">
+            <div class="glitch-name">
+                <span class="ml-text">ODON ML</span>
+            </div>
+            <p class="subtitle">Aprendiendo DevOps</p>
+        </header>
+
+        <section id="about">
+            <h2>Sobre mí</h2>
+            <div class="about-content">
+                <p>
+                    Soy <strong>desarrollador fullstack</strong> con +6 años de experiencia, mi puesto actual es <strong>SCM Git y GitHub</strong>.
+                </p>
+                <br>
+                <p>
+                    Actualmente me encuentro certificado en <strong>GitHub Foundations</strong> y <strong>GitHub Actions</strong>, estoy buscando aprender sobre el área DevOps por este motivo arranco este bootcamp con Codigo Facilito.
+                </p>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2>Skills que voy a aprender</h2>
+            <div class="skills-container">
+                <div class="skill-tag">LINUX</div>
+                <div class="skill-tag">DOCKER</div>
+                <div class="skill-tag">CI/CD</div>
+                <div class="skill-tag">K8S</div>
+                <div class="skill-tag">TERRAFORM</div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2>Proyectos</h2>
+            <div class="projects-grid">
+                <div class="card">
+                    <div class="card-content">
+                        <h3>Proyecto 01</h3>
+                        <p>Placeholder para futuro proyecto DevOps.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3>Proyecto 02</h3>
+                        <p>Placeholder para futuro proyecto DevOps.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3>Proyecto 03</h3>
+                        <p>Placeholder para futuro proyecto DevOps.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 OdonML</p>
+        <a href="https://github.com/odonml" class="github-link" target="_blank">github.com/odonml</a>
+    </footer>
+
+    <script>
+        const photo = document.getElementById('main-photo');
+        const hero = document.getElementById('hero');
+
+        const headerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    photo.classList.remove('photo-hidden');
+                } else {
+                    photo.classList.add('photo-hidden');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        headerObserver.observe(hero);
+
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth - e.pageX * 2) / 100;
+            const y = (window.innerHeight - e.pageY * 2) / 100;
+            photo.style.transform = `translateX(${x}px) translateY(${y}px)`;
+        });
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = "0";
+            section.style.transform = "translateY(30px)";
+            section.style.transition = "all 0.8s ease-out";
+            sectionObserver.observe(section);
+        });
+    </script>
+</body>
+</html>
